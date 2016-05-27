@@ -6,3 +6,23 @@ h1{font-family: "Trebuchet MS", Arial; color: #cccccc;}
 .panel-title span{color: #16a085}
 
 .status{padding: 6px; margin-right: 10px;}
+
+.total{
+	padding: 10px;
+	background-color: #2b542c;
+	color: #FFF;
+	font-size: 14px;
+	font-weight: normal;
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:10px;
+}
+
+.total #total{
+	font-size: 20px;
+	color: #2ca02c;
+	font-weight: bold;
+}

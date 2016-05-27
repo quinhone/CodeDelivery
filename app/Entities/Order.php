@@ -12,10 +12,16 @@ class Order extends Model implements Transformable
 
 	protected $fillable = [
 		'user_id',
+		'cupom_id',
 		'user_deliveryman_id',
 		'total',
 		'status',
 	];
+
+	public function cupom()
+	{
+		return $this->hasOne(Cupom::class);
+	}
 
 	public function items()
 	{

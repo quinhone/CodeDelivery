@@ -19,6 +19,15 @@ class UserTableSeeder extends Seeder
 			'name' => 'Luis Carlos Quinhone',
 			'email' => 'lcquinhone@gmail.com',
 			'password' => bcrypt ( 123456 ),
+			'role' => 'admin',
+			'remember_token' => str_random ( 10 ),
+		] );
+
+		User::create ( [
+			'name' => 'Eliane',
+			'email' => 'quinhone@direciona.com.br',
+			'password' => bcrypt ( 123456 ),
+			'role' => 'client',
 			'remember_token' => str_random ( 10 ),
 		] );
 

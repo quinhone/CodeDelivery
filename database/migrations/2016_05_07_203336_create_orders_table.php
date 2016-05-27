@@ -16,6 +16,8 @@ class CreateOrdersTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('cupom_id')->unsigned()->nullable();
+            $table->foreign('cupom_id')->references('id')->on('cupoms');
             $table->integer('user_deliveryman_id')->unsigned()->nullable();
             $table->foreign('user_deliveryman_id')->references('id')->on('users');
             $table->decimal('total');
