@@ -84,3 +84,17 @@ Route::group ( [ 'prefix' => 'customer', 'middleware' => 'auth.checkrole:client'
 	Route::get ( 'order/delete', [ 'as' => 'order.delete', 'uses' => 'CheckoutController@delete' ] );
 	Route::post ( 'order/store', [ 'as' => 'order.store', 'uses' => 'CheckoutController@store' ] );
 } );
+
+Route::group ( [ 'prefix' => 'api', 'middleware' => 'oauth', 'as' => 'api.' ], function () {
+	Route::get('teste', function(){
+		return [
+			'id' => 1,
+			'client' => 'Luis Carlos Quinhone',
+			'total' => 10.00
+		];
+	});
+});
+
+Route::post('oauth/access_token', function() {
+	return Response::json(Authorizer::issueAccessToken());
+});
