@@ -22,7 +22,7 @@ class OrderService
 
 	public function __construct ( OrderRepository $orderRepository,
 	                              CupomRepository $cupomRepository,
-	                              ProductRepository $productRepository)
+	                              ProductRepository $productRepository )
 	{
 		$this->orderRepository = $orderRepository;
 		$this->cupomRepository = $cupomRepository;
@@ -31,8 +31,8 @@ class OrderService
 
 	public function create ( array $data )
 	{
-		DB::beginTransaction();
-		try{
+		DB::beginTransaction ();
+		try {
 			$data[ 'status' ] = 0;
 			if ( isset( $data[ 'cupom_code' ] ) ) {
 				$cupom = $this->cupomepository->findByField ( 'code' . $data[ 'cupom_code' ] )->first ();
@@ -50,7 +50,7 @@ class OrderService
 
 			foreach ( $items as $item ) {
 				$item[ 'price' ] = $this->productRepository->find ( $item[ 'product_id' ] )->price;
-				$order->items()->create ( $item );
+				$order->items ()->create ( $item );
 				$total += $item[ 'price' ] * $item[ 'qtd' ];
 			}
 
@@ -60,10 +60,10 @@ class OrderService
 			}
 
 			$order->save ();
-			DB::commit();
-		}catch(\Exception $e)
-		{
-			DB::rollback();
+			DB::commit ();
+			return $order;
+		} catch ( \Exception $e ) {
+			DB::rollback ();
 			throw $e;
 		}
 

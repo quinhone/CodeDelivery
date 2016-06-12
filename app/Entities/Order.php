@@ -20,7 +20,7 @@ class Order extends Model implements Transformable
 
 	public function cupom()
 	{
-		return $this->hasOne(Cupom::class);
+		return $this->belongsTo(Cupom::class);
 	}
 
 	public function items()

@@ -62,8 +62,7 @@ Route::group ( [ 'prefix' => 'admin', 'middleware' => 'auth.checkrole:admin', 'a
 		Route::post ( 'update/{id}', [ 'as' => 'update', 'uses' => 'OrdersController@update' ] );
 
 	} );
-	Route::
-	group ( [ 'prefix' => 'cupoms', 'as' => 'cupoms.' ], function () {
+	Route::group ( [ 'prefix' => 'cupoms', 'as' => 'cupoms.' ], function () {
 
 		Route::get ( '/', [ 'as' => 'index', 'uses' => 'CupomsController@index' ] );
 		Route::get ( 'edit/{id}', [ 'as' => 'edit', 'uses' => 'CupomsController@edit' ] );
@@ -86,13 +85,29 @@ Route::group ( [ 'prefix' => 'customer', 'middleware' => 'auth.checkrole:client'
 } );
 
 Route::group ( [ 'prefix' => 'api', 'middleware' => 'oauth', 'as' => 'api.' ], function () {
-	Route::get('teste', function(){
-		return [
-			'id' => 1,
-			'client' => 'Luis Carlos Quinhone',
-			'total' => 10.00
-		];
+
+	Route::group ( [ 'prefix' => 'client', 'middleware' => 'oauth.checkrole:client', 'as' => 'client.' ], function () {
+
+		Route::resource('order',
+			'Api\Client\ClientCheckoutController', ['except' => ['create', 'edit', 'destroy']
+		]);
+
 	});
+
+	Route::resource('authenticated',
+		'Api\Client\UserController', ['except' => ['show', 'create', 'store', 'edit', 'destroy' ]
+	]);
+
+	Route::group ( [ 'prefix' => 'deliveryman', 'middleware' => 'oauth.checkrole:deliveryman', 'as' => 'deliveryman.' ], function () {
+		Route::get('pedido', function(){
+			return [
+				'id' => 1,
+				'client' => 'Luis Carlos Quinhone - Entregador',
+				'total' => 10.00
+			];
+		});
+	});
+
 });
 
 Route::post('oauth/access_token', function() {
