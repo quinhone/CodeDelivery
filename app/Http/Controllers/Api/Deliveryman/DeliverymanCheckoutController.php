@@ -1,9 +1,8 @@
 <?php
 
-namespace CodeDelivery\Http\Controllers\Api\Client;
+namespace CodeDelivery\Http\Controllers\Api\Deliveryman;
 
 use CodeDelivery\Http\Controllers\Controller;
-use CodeDelivery\Http\Requests\CheckoutRequest;
 use CodeDelivery\Repositories\OrderRepository;
 use CodeDelivery\Repositories\UserRepository;
 use CodeDelivery\Services\OrderService;
@@ -12,7 +11,7 @@ use Illuminate\Http\Request;
 use CodeDelivery\Http\Requests;
 use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 
-class ClientCheckoutController extends Controller
+class DeliverymanCheckoutController extends Controller
 {
     /**
      * @var OrderRepository
@@ -22,7 +21,6 @@ class ClientCheckoutController extends Controller
      * @var UserRepository
      */
     private $userRepository;
-
     /**
      * @var OrderService
      */
@@ -47,13 +45,11 @@ class ClientCheckoutController extends Controller
     public function index()
     {
         $id = Authorizer::getResourceOwnerId();
-        $clientId = $this->userRepository->find($id)->client->id;
 
         $orders = $this->orderRepository
             ->skipPresenter(false)
-            ->with($this->relations)
-            ->scopeQuery(function($query) use($clientId){
-            return $query->where('user_id', '=', $clientId);
+            ->with($this->relations)->scopeQuery(function($query) use($id){
+            return $query->where('user_deliveryman_id', '=', $id);
         })->paginate();
 
         return $orders;
@@ -75,15 +71,9 @@ class ClientCheckoutController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CheckoutRequest $request)
+    public function store(Request $request)
     {
-        $data = $request->all();
-        $id = Authorizer::getResourceOwnerId();
 
-        $clientId = $this->userRepository->find($id)->client->id;
-        $data['user_id'] = $clientId;
-        $o = $this->orderService->create($data);
-        return $this->orderRepository->skipPresenter(false)->with($this->relations)->find($o->id);
     }
 
     /**
@@ -94,40 +84,20 @@ class ClientCheckoutController extends Controller
      */
     public function show($id)
     {
-        return $this->orderRepository->skipPresenter(false)->with($this->relations)->find($id);
+        $idDeliveryman = Authorizer::getResourceOwnerId();
+        return $this->orderRepository->skipPresenter(false)->getByIdAndDeliveryman($id, $idDeliveryman);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function updateStatus(Request $request, $id)
     {
-        //
+        $idDeliveryman = Authorizer::getResourceOwnerId();
+        $order = $this->orderService->updateStatus($id, $idDeliveryman, $request->get('status'));
+
+        if($order)
+            return $this->orderRepository->find($order->id);
+
+        abort(400, 'Ordem não encontrada');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

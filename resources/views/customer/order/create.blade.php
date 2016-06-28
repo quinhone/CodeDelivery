@@ -30,7 +30,7 @@
 			<tr>
 				<td>
 					<select class="form-control" name="items[0][product_id]">
-						<option value="0,00" data-price="0">Selecione um Produto...</option>
+						<option value="" data-price="0">Selecione um Produto...</option>
 						@foreach($products as $p)
 							<option value="{{$p->id}}" data-price="{{$p->price}}">{{$p->name}} --- {{$p->price}}</option>
 						@endforeach

@@ -1,0 +1,30 @@
+<?php
+
+namespace CodeDelivery\Transformers;
+
+use League\Fractal\TransformerAbstract;
+use CodeDelivery\Entities\User;
+
+/**
+ * Class UserTransformer
+ * @package namespace CodeDelivery\Transformers;
+ */
+class UserTransformer extends TransformerAbstract
+{
+
+    /**
+     * Transform the \User entity
+     * @param \User $model
+     *
+     * @return array
+     */
+    public function transform(User $model)
+    {
+        return [
+            'id'         => (int) $model->id,
+            'nome' => $model->nome,
+            'email' => $model->email,
+            'role' => $model->role
+        ];
+    }
+}

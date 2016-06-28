@@ -9,6 +9,7 @@
 namespace CodeDelivery\Services;
 
 
+use CodeDelivery\Entities\Order;
 use CodeDelivery\Repositories\CupomRepository;
 use CodeDelivery\Repositories\OrderRepository;
 use CodeDelivery\Repositories\ProductRepository;
@@ -16,17 +17,21 @@ use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
-	private $orderRepository;
 	private $cupomRepository;
 	private $productRepository;
+	/**
+	 * @var OrderRepository
+	 */
+	private $orderRepository;
 
 	public function __construct ( OrderRepository $orderRepository,
 	                              CupomRepository $cupomRepository,
 	                              ProductRepository $productRepository )
 	{
-		$this->orderRepository = $orderRepository;
+
 		$this->cupomRepository = $cupomRepository;
 		$this->productRepository = $productRepository;
+		$this->orderRepository = $orderRepository;
 	}
 
 	public function create ( array $data )
@@ -34,8 +39,11 @@ class OrderService
 		DB::beginTransaction ();
 		try {
 			$data[ 'status' ] = 0;
+
+			if(isset($data['cupom_id'])){ unset($data['cupom_id']); }
+
 			if ( isset( $data[ 'cupom_code' ] ) ) {
-				$cupom = $this->cupomepository->findByField ( 'code' . $data[ 'cupom_code' ] )->first ();
+				$cupom = $this->cupomRepository->findByField ( 'code' , $data[ 'cupom_code' ] )->first ();
 				$data[ 'cupom_id' ] = $cupom->id;
 				$cupom->used = 1;
 				$cupom->save ();
@@ -67,5 +75,17 @@ class OrderService
 			throw $e;
 		}
 
+	}
+
+	public function updateStatus($id, $idDeliveryman, $status)
+	{
+		$order = $this->orderRepository->getByIdAndDeliveryman($id, $idDeliveryman);
+		if($order instanceof Order)
+		{
+			$order->status = $status;
+			$order->save();
+			return $order;
+		}
+		return false;
 	}
 }

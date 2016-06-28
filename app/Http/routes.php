@@ -15,7 +15,6 @@ Route::get ( '/', function () {
 } );
 
 
-
 Route::get ( '/home', function () {
 	return view ( 'welcome' );
 } );
@@ -77,7 +76,8 @@ Route::group ( [ 'prefix' => 'admin', 'middleware' => 'auth.checkrole:admin', 'a
 } );
 
 Route::group ( [ 'prefix' => 'customer', 'middleware' => 'auth.checkrole:client', 'as' => 'customer.' ], function () {
-	Route::get ( '/', [ 'as' => 'order.index', 'uses' => 'CheckoutController@index' ] );
+	Route::get ( '/', [ 'as' => 'order', 'uses' => 'CheckoutController@index' ] );
+	Route::get ( 'order', [ 'as' => 'order.index', 'uses' => 'CheckoutController@index' ] );
 	Route::get ( 'order/edit', [ 'as' => 'order.edit', 'uses' => 'CheckoutController@edit' ] );
 	Route::get ( 'order/create', [ 'as' => 'order.create', 'uses' => 'CheckoutController@create' ] );
 	Route::get ( 'order/delete', [ 'as' => 'order.delete', 'uses' => 'CheckoutController@delete' ] );
@@ -88,28 +88,26 @@ Route::group ( [ 'prefix' => 'api', 'middleware' => 'oauth', 'as' => 'api.' ], f
 
 	Route::group ( [ 'prefix' => 'client', 'middleware' => 'oauth.checkrole:client', 'as' => 'client.' ], function () {
 
-		Route::resource('order',
-			'Api\Client\ClientCheckoutController', ['except' => ['create', 'edit', 'destroy']
-		]);
+		Route::resource ( 'order',
+			'Api\Client\ClientCheckoutController', [ 'except' => [ 'create', 'edit', 'destroy' ]
+			] );
 
-	});
+	} );
 
-	Route::resource('authenticated',
-		'Api\Client\UserController', ['except' => ['show', 'create', 'store', 'edit', 'destroy' ]
-	]);
+	Route::resource ( 'authenticated',
+		'Api\Client\UserController', [ 'except' => [ 'show', 'create', 'store', 'edit', 'destroy' ]
+		] );
 
 	Route::group ( [ 'prefix' => 'deliveryman', 'middleware' => 'oauth.checkrole:deliveryman', 'as' => 'deliveryman.' ], function () {
-		Route::get('pedido', function(){
-			return [
-				'id' => 1,
-				'client' => 'Luis Carlos Quinhone - Entregador',
-				'total' => 10.00
-			];
-		});
-	});
+		Route::resource ( 'order',
+			'Api\Deliveryman\DeliverymanCheckoutController', [ 'except' => [ 'create', 'edit', 'destroy', 'store' ]
+			] );
 
-});
+		Route::patch ( 'order/{id}/update-status', [ 'uses' => 'Api\Deliveryman\DeliverymanCheckoutController@updateStatus', 'as' => 'order.update_status' ] );
+	} );
 
-Route::post('oauth/access_token', function() {
-	return Response::json(Authorizer::issueAccessToken());
-});
+} );
+
+Route::post ( 'oauth/access_token', function () {
+	return Response::json ( Authorizer::issueAccessToken () );
+} );
