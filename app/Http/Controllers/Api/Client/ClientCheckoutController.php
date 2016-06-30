@@ -47,7 +47,9 @@ class ClientCheckoutController extends Controller
     public function index()
     {
         $id = Authorizer::getResourceOwnerId();
+
         $clientId = $this->userRepository->find($id)->client->id;
+
 
         $orders = $this->orderRepository
             ->skipPresenter(false)

@@ -30,7 +30,7 @@ class OAuthCheckRole
 	public function handle($request, Closure $next, $role) //aqui adicionamos um parametro para o middleware
 	{
 		$id = Authorizer::getResourceOwnerId();
-		$user = $this->userRepository->find($id);
+		$user = $this->userRepository->skipPresenter()->find($id);
 
 		if($user->role != $role)
 			abort(403, 'Access Forbidden');

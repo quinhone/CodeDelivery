@@ -22,14 +22,15 @@ class OrderItemTransformer extends TransformerAbstract
     public function transform(OrderItem $model)
     {
         return [
-            'id'         => (int) $model->id,
+            'id'    => (int) $model->id,
+            'product_id' => (int) $model->product_id,
             'price' => $model->price,
-            'qtd' => $model->qtd
+            'qtd'   => $model->qtd
         ];
     }
 
     public function includeProduct(OrderItem $model)
     {
-        return $this->collection($model->items, new ProductTransformer());
+        return $this->item($model->items, new ProductTransformer());
     }
 }

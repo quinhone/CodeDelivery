@@ -17,11 +17,6 @@ class OrderItem extends Model implements Transformable
 		'qtd',
 	];
 
-	public function product()
-	{
-		return $this->belongsTo(Product::class);
-	}
-
 	public function order()
 	{
 		return $this->belongsTo(Order::class);
@@ -32,9 +27,9 @@ class OrderItem extends Model implements Transformable
 		return $this->hasOne(User::class);
 	}
 
-	public function products()
+	public function product()
 	{
-		return $this->hasMany(Product::class);
+		return $this->belongsTo(Product::class);
 	}
 
 }
