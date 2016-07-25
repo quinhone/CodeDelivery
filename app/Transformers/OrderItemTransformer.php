@@ -33,5 +33,5 @@ class OrderItemTransformer extends TransformerAbstract
 	{
 		return $this->item ( $model->product, new ProductTransformer() );
 	}
-	
+
 }
