@@ -97,6 +97,7 @@ Route::group ( [ 'middleware' => 'cors' ], function () {
 			Route::resource ( 'order',
 				'Api\Client\ClientCheckoutController', [ 'except' => [ 'create', 'edit', 'destroy' ]
 				] );
+			Route::get('products', 'Api\Client\ClientProductController@index');
 
 		} );
 
