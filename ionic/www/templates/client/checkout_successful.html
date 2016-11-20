@@ -1,13 +1,11 @@
 <ion-view>
-    <ion-nav-title>Pedido</ion-nav-title>
-    <div class="bar bar-subheader">
-        <button class="button button-icon ion-plus" ng-click="openListProducts()"></button>
+    <ion-nav-title>Pedido finalizado com sucesso</ion-nav-title>
+    <div class="bar bar-balanced bar-subheader">
         <h2 class="title">Total Pedido: R$ {{ total }}</h2>
-        <button class="button button-icon ion-android-delete" ng-click="showDelete = !showDelete"></button>
     </div>
     <ion-content class="padding has-subheader">
         <ion-list show-delete="showDelete">
-            <ion-item ng-repeat="obj in items" ng-click="openProductDetail($index)">
+            <ion-item ng-repeat="obj in items">
                 <div class="row">
                     <div class="item">
                         <img src="http://lorempixel.com/output/food-q-c-100-100-1.jpg" alt="">
@@ -20,9 +18,8 @@
                         </p>
                     </div>
                 </div>
-                <ion-delete-button class="ion ion-android-delete" ng-click="removeItem($index)"></ion-delete-button>
             </ion-item>
         </ion-list>
-        <button class="button button-assertive button-full" ng-click="save()"> Fechar Pedido</button>
+        <button class="button button-positive button-full" ng-click="openListOrder()">  Ver Pedidos</button>
     </ion-content>
 </ion-view>

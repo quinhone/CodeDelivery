@@ -1,6 +1,27 @@
 <ion-view>
-    <ion-nav-title>Code Delivery</ion-nav-title>
-    <ion-content class="padding">
-        Detalhe
+    <ion-nav-title>Produto: {{ product.name }}</ion-nav-title>
+    <div class="bar bar-subheader">
+        <h2 class="title">Detalhes do Produto</h2>
+    </div>
+    <ion-content class="padding has-subheader">
+        <div class="list card">
+            <img src="http://lorempixel.com/output/food-q-c-500-250-9.jpg" alt="" class="img-full">
+            <div class="item item-avatar">
+                <h2>{{ product.name }}</h2>
+                Quantidade: {{ product.qtd }}<br/>
+                <i class="ion ion-cash"> {{ product.price }} </i>
+            </div>
+            <label for="quantidade" class="item item-input">
+                <span class="input-label">Quantidade: </span>
+                <input type="text" placeholder="Digite uma Quantidade" ng-model="product.qtd"/>
+            </label>
+            <button type="button" class="button button-assertive button-full" ng-click="updateQtd()">Alterar
+                Quantidade
+            </button>
+            <div class="item item-body">
+                <h2>Descrição:</h2>
+                <p>{{ product.description }}</p>
+            </div>
+        </div>
     </ion-content>
 </ion-view>

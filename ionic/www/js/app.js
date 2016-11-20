@@ -4,8 +4,9 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 angular.module('starter.controllers', []);
+angular.module('starter.services', []);
 
-angular.module('starter', ['ionic', 'starter.controllers', 'angular-oauth2', 'ngResource'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'angular-oauth2', 'ngResource'])
 
     .constant('appConfig', {
         baseURL: 'http://localhost:8000'
@@ -54,16 +55,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'angular-oauth2', 'ng
             .state('home', {
                 url: '/home',
                 templateUrl: '/templates/home.html',
-                controller: function($scope){
+                controller: function ($scope) {
 
                 }
             })
             .state('client', {
                 abstract: true,
                 url: '/client',
-                template: '<ui-view/>'
+                template: '<ion-nav-view/>'
             })
             .state('client.checkout', {
+                cache: false,
                 url: '/checkout',
                 templateUrl: '/templates/client/checkout.html',
                 controller: 'ClientCheckoutCtrl'
@@ -73,10 +75,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'angular-oauth2', 'ng
                 templateUrl: '/templates/client/checkout_item_detail.html',
                 controller: 'ClientCheckoutDetailCtrl'
             })
+            .state('client.checkout_successful', {
+                url: '/checkout/successful',
+                templateUrl: '/templates/client/checkout_successful.html',
+                controller: 'ClientCheckoutSuccessfulCtrl'
+            })
             .state('client.view_products', {
                 url: '/view_products',
                 templateUrl: '/templates/client/view_products.html',
                 controller: 'ClientViewProductCtrl'
             });
         //$urlRouterProvider.otherwise('/');
+    })
+    .service('cart', function () {
+        this.items = [];
     });
